@@ -5,53 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Neha 💖</title>
 
+<!-- Romantic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
 * {
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
 body {
     margin: 0;
     height: 100vh;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    background: radial-gradient(circle at top, #ff9ab5, #ff5c8a);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    font-family: "Poppins", sans-serif;
 }
 
 /* FIRST SCREEN */
 .box {
     background: white;
-    padding: 30px 25px;
-    border-radius: 22px;
-    width: 90%;
-    max-width: 360px;
+    padding: 55px 40px;
+    border-radius: 30px;
+    width: 92%;
+    max-width: 500px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    box-shadow:
+        0 0 25px rgba(255, 77, 109, 0.4),
+        0 30px 60px rgba(0,0,0,0.3);
+    animation: softGlow 3s ease-in-out infinite;
+}
+
+@keyframes softGlow {
+    0%, 100% { box-shadow: 0 0 25px rgba(255,77,109,0.4), 0 30px 60px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 40px rgba(255,77,109,0.6), 0 30px 60px rgba(0,0,0,0.35); }
 }
 
 .box h2 {
+    font-family: "Great Vibes", cursive;
+    font-size: 38px;
     color: #ff4d6d;
-    margin-bottom: 25px;
+    margin-bottom: 40px;
 }
 
+/* BUTTON AREA */
 .buttons {
     position: relative;
-    height: 120px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
-    padding: 14px 28px;
-    font-size: 16px;
-    border-radius: 40px;
+    padding: 18px 40px;
+    font-size: 18px;
+    border-radius: 50px;
     border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
 }
 
 #yes {
     background: #ff4d6d;
     color: white;
+    box-shadow: 0 0 20px rgba(255,77,109,0.6);
+    margin-right: 30px;
 }
 
 #no {
@@ -65,30 +90,70 @@ button {
     display: none;
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #ff4d6d, #ff758c);
+    background: radial-gradient(circle at top, #ff9ab5, #ff4d6d);
     color: white;
-    font-size: 28px;
     text-align: center;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 30px;
 }
 
-/* HEART ANIMATION */
+#final img {
+    width: 190px;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+    margin-bottom: 22px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+}
+
+#final h1 {
+    font-family: "Great Vibes", cursive;
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+#final p {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 6px 0;
+}
+
+#replay {
+    margin-top: 22px;
+    padding: 14px 36px;
+    background: white;
+    color: #ff4d6d;
+    font-size: 16px;
+}
+
+/* QR */
+#qr {
+    margin-top: 20px;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* HEARTS */
 .heart {
     position: fixed;
     font-size: 22px;
-    animation: floatUp 1.6s ease forwards;
+    animation: floatUp 1.8s ease forwards;
 }
 
 @keyframes floatUp {
     from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-140px); opacity: 0; }
+    to { transform: translateY(-180px); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- FIRST SCREEN -->
 <div class="box" id="box">
     <h2>Neha 💕<br>Will you be my Valentine?</h2>
 
@@ -98,9 +163,22 @@ button {
     </div>
 </div>
 
+<!-- FINAL SCREEN -->
 <div id="final">
-    ❤️ Best decision ever ❤️
+    <img src="neha.jpg" alt="Neha">
+    <h1>Best decision ever 💕</h1>
+    <p id="dateText"></p>
+
+    <!-- QR CODE -->
+    <img id="qr" alt="QR Code">
+
+    <button id="replay">Replay 💖</button>
 </div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+    <source src="love-song.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const noBtn = document.getElementById("no");
@@ -108,8 +186,12 @@ const yesBtn = document.getElementById("yes");
 const area = document.querySelector(".buttons");
 const box = document.getElementById("box");
 const final = document.getElementById("final");
+const music = document.getElementById("music");
+const replayBtn = document.getElementById("replay");
+const dateText = document.getElementById("dateText");
+const qr = document.getElementById("qr");
 
-// NO button escape (desktop + mobile)
+/* NO button escape */
 function moveNo(e) {
     e.preventDefault();
     const maxX = area.clientWidth - noBtn.offsetWidth;
@@ -117,25 +199,52 @@ function moveNo(e) {
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
 }
-
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
-// YES click
+/* YES click */
 yesBtn.addEventListener("click", () => {
     box.style.display = "none";
     final.style.display = "flex";
 
-    // heart burst
-    for (let i = 0; i < 18; i++) {
+    // Date
+    const now = new Date();
+    dateText.innerText = "💌 " + now.toDateString();
+
+    // QR code (current page)
+    qr.src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(window.location.href);
+
+    // Music fade-in
+    music.volume = 0;
+    music.play();
+    let vol = 0;
+    const fade = setInterval(() => {
+        if (vol < 0.6) {
+            vol += 0.02;
+            music.volume = vol;
+        } else {
+            clearInterval(fade);
+        }
+    }, 120);
+
+    // Hearts
+    for (let i = 0; i < 26; i++) {
         const h = document.createElement("div");
         h.className = "heart";
         h.innerHTML = "💖";
         h.style.left = Math.random() * 100 + "vw";
         h.style.bottom = "30px";
         document.body.appendChild(h);
-        setTimeout(() => h.remove(), 1600);
+        setTimeout(() => h.remove(), 1800);
     }
+});
+
+/* REPLAY */
+replayBtn.addEventListener("click", () => {
+    music.pause();
+    music.currentTime = 0;
+    final.style.display = "none";
+    box.style.display = "block";
 });
 </script>
 
