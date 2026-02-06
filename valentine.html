@@ -29,7 +29,9 @@ body {
     width: 92%;
     max-width: 520px;
     text-align: center;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    box-shadow:
+        0 0 30px rgba(255,77,109,0.4),
+        0 30px 60px rgba(0,0,0,0.3);
 }
 
 .box h2 {
@@ -58,7 +60,7 @@ button {
     color: white;
     position: absolute;
     left: 50%;
-    transform: translateX(-120%);
+    transform: translateX(-140%);
 }
 
 #no {
@@ -66,7 +68,7 @@ button {
     color: #777;
     position: absolute;
     left: 50%;
-    transform: translateX(20%);
+    transform: translateX(40%);
 }
 
 /* FINAL SCREEN */
@@ -83,14 +85,16 @@ button {
     padding: 30px;
 }
 
-#final img.photo {
-    width: 190px;
-    height: 190px;
+/* PHOTO — FIXED */
+#final img {
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 50%;
-    border: 5px solid white;
-    margin-bottom: 22px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6);
+    border: 6px solid white;
+    background: white;
+    margin-bottom: 25px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.7);
 }
 
 #final h1 {
@@ -101,12 +105,12 @@ button {
 
 #final p {
     font-size: 16px;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
-#replay, #downloadQR {
-    margin-top: 18px;
-    padding: 14px 34px;
+#replay {
+    margin-top: 22px;
+    padding: 14px 36px;
     background: white;
     color: #ff4d6d;
     font-size: 16px;
@@ -140,13 +144,14 @@ button {
 
 <!-- FINAL SCREEN -->
 <div id="final">
-    <img src="neha.JPG" alt="Neha" class="photo">
+    <!-- PHOTO (ALWAYS PRESENT) -->
+    <img src="neha.jpg" alt="Neha">
     <h1>Best decision ever 💕</h1>
     <p id="dateText"></p>
-    <button id="downloadQR">Download Memory QR</button>
     <button id="replay">Replay 💖</button>
 </div>
 
+<!-- MUSIC -->
 <audio id="music" loop>
     <source src="love-song.mp3" type="audio/mpeg">
 </audio>
@@ -159,14 +164,13 @@ const final = document.getElementById("final");
 const music = document.getElementById("music");
 const replayBtn = document.getElementById("replay");
 const dateText = document.getElementById("dateText");
-const downloadQR = document.getElementById("downloadQR");
 
 /* NO button escape */
 function moveNo(e) {
     e.preventDefault();
-    const container = document.querySelector(".buttons");
-    const maxX = container.clientWidth - noBtn.offsetWidth;
-    const maxY = container.clientHeight - noBtn.offsetHeight;
+    const area = document.querySelector(".buttons");
+    const maxX = area.clientWidth - noBtn.offsetWidth;
+    const maxY = area.clientHeight - noBtn.offsetHeight;
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
 }
@@ -181,16 +185,20 @@ yesBtn.addEventListener("click", () => {
     const now = new Date();
     dateText.innerText = "💌 " + now.toDateString();
 
-    // fade-in music
+    // Fade-in music
     music.volume = 0;
     music.play();
     let v = 0;
     const fade = setInterval(() => {
-        if (v < 0.6) { v += 0.02; music.volume = v; }
-        else clearInterval(fade);
+        if (v < 0.6) {
+            v += 0.02;
+            music.volume = v;
+        } else {
+            clearInterval(fade);
+        }
     }, 120);
 
-    // hearts
+    // Hearts
     for (let i = 0; i < 24; i++) {
         const h = document.createElement("div");
         h.className = "heart";
@@ -200,16 +208,6 @@ yesBtn.addEventListener("click", () => {
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 1800);
     }
-});
-
-/* DOWNLOAD QR (PNG) */
-downloadQR.addEventListener("click", () => {
-    const url = encodeURIComponent(window.location.href);
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${url}`;
-    const a = document.createElement("a");
-    a.href = qrUrl;
-    a.download = "our-valentine-memory.png";
-    a.click();
 });
 
 /* REPLAY */
