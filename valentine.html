@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Neha 💖</title>
 
-<!-- Romantic Font -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -30,33 +27,22 @@ body {
     padding: 55px 40px;
     border-radius: 30px;
     width: 92%;
-    max-width: 500px;
+    max-width: 520px;
     text-align: center;
-    box-shadow:
-        0 0 25px rgba(255, 77, 109, 0.4),
-        0 30px 60px rgba(0,0,0,0.3);
-    animation: softGlow 3s ease-in-out infinite;
-}
-
-@keyframes softGlow {
-    0%, 100% { box-shadow: 0 0 25px rgba(255,77,109,0.4), 0 30px 60px rgba(0,0,0,0.3); }
-    50% { box-shadow: 0 0 40px rgba(255,77,109,0.6), 0 30px 60px rgba(0,0,0,0.35); }
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
 }
 
 .box h2 {
     font-family: "Great Vibes", cursive;
-    font-size: 38px;
+    font-size: 40px;
     color: #ff4d6d;
-    margin-bottom: 40px;
+    margin-bottom: 45px;
 }
 
 /* BUTTON AREA */
 .buttons {
     position: relative;
     height: 160px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 button {
@@ -65,24 +51,22 @@ button {
     border-radius: 50px;
     border: none;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-button:hover {
-    transform: scale(1.05);
 }
 
 #yes {
     background: #ff4d6d;
     color: white;
-    box-shadow: 0 0 20px rgba(255,77,109,0.6);
-    margin-right: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-120%);
 }
 
 #no {
-    position: absolute;
     background: #ddd;
     color: #777;
+    position: absolute;
+    left: 50%;
+    transform: translateX(20%);
 }
 
 /* FINAL SCREEN */
@@ -99,7 +83,7 @@ button:hover {
     padding: 30px;
 }
 
-#final img {
+#final img.photo {
     width: 190px;
     height: 190px;
     object-fit: cover;
@@ -111,30 +95,22 @@ button:hover {
 
 #final h1 {
     font-family: "Great Vibes", cursive;
-    font-size: 42px;
+    font-size: 44px;
     margin: 10px 0;
 }
 
 #final p {
     font-size: 16px;
     opacity: 0.9;
-    margin: 6px 0;
 }
 
-#replay {
-    margin-top: 22px;
-    padding: 14px 36px;
+#replay, #downloadQR {
+    margin-top: 18px;
+    padding: 14px 34px;
     background: white;
     color: #ff4d6d;
     font-size: 16px;
-}
-
-/* QR */
-#qr {
-    margin-top: 20px;
-    background: white;
-    padding: 10px;
-    border-radius: 12px;
+    border-radius: 40px;
 }
 
 /* HEARTS */
@@ -156,7 +132,6 @@ button:hover {
 <!-- FIRST SCREEN -->
 <div class="box" id="box">
     <h2>Neha 💕<br>Will you be my Valentine?</h2>
-
     <div class="buttons">
         <button id="yes">YES 💖</button>
         <button id="no">NO 🙅‍♀️</button>
@@ -165,17 +140,13 @@ button:hover {
 
 <!-- FINAL SCREEN -->
 <div id="final">
-    <img src="neha.jpg" alt="Neha">
+    <img src="neha.jpg" alt="Neha" class="photo">
     <h1>Best decision ever 💕</h1>
     <p id="dateText"></p>
-
-    <!-- QR CODE -->
-    <img id="qr" alt="QR Code">
-
+    <button id="downloadQR">Download Memory QR</button>
     <button id="replay">Replay 💖</button>
 </div>
 
-<!-- MUSIC -->
 <audio id="music" loop>
     <source src="love-song.mp3" type="audio/mpeg">
 </audio>
@@ -183,19 +154,19 @@ button:hover {
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
-const area = document.querySelector(".buttons");
 const box = document.getElementById("box");
 const final = document.getElementById("final");
 const music = document.getElementById("music");
 const replayBtn = document.getElementById("replay");
 const dateText = document.getElementById("dateText");
-const qr = document.getElementById("qr");
+const downloadQR = document.getElementById("downloadQR");
 
 /* NO button escape */
 function moveNo(e) {
     e.preventDefault();
-    const maxX = area.clientWidth - noBtn.offsetWidth;
-    const maxY = area.clientHeight - noBtn.offsetHeight;
+    const container = document.querySelector(".buttons");
+    const maxX = container.clientWidth - noBtn.offsetWidth;
+    const maxY = container.clientHeight - noBtn.offsetHeight;
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
 }
@@ -207,28 +178,20 @@ yesBtn.addEventListener("click", () => {
     box.style.display = "none";
     final.style.display = "flex";
 
-    // Date
     const now = new Date();
     dateText.innerText = "💌 " + now.toDateString();
 
-    // QR code (current page)
-    qr.src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(window.location.href);
-
-    // Music fade-in
+    // fade-in music
     music.volume = 0;
     music.play();
-    let vol = 0;
+    let v = 0;
     const fade = setInterval(() => {
-        if (vol < 0.6) {
-            vol += 0.02;
-            music.volume = vol;
-        } else {
-            clearInterval(fade);
-        }
+        if (v < 0.6) { v += 0.02; music.volume = v; }
+        else clearInterval(fade);
     }, 120);
 
-    // Hearts
-    for (let i = 0; i < 26; i++) {
+    // hearts
+    for (let i = 0; i < 24; i++) {
         const h = document.createElement("div");
         h.className = "heart";
         h.innerHTML = "💖";
@@ -237,6 +200,16 @@ yesBtn.addEventListener("click", () => {
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 1800);
     }
+});
+
+/* DOWNLOAD QR (PNG) */
+downloadQR.addEventListener("click", () => {
+    const url = encodeURIComponent(window.location.href);
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${url}`;
+    const a = document.createElement("a");
+    a.href = qrUrl;
+    a.download = "our-valentine-memory.png";
+    a.click();
 });
 
 /* REPLAY */
