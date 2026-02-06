@@ -6,23 +6,35 @@
 <title>For Neha 💖</title>
 
 <style>
-body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #ff7eb3;
+* {
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* FIRST SCREEN */
 .box {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
+    padding: 30px 25px;
+    border-radius: 22px;
     width: 90%;
-    max-width: 350px;
+    max-width: 360px;
     text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.box h2 {
+    color: #ff4d6d;
+    margin-bottom: 25px;
 }
 
 .buttons {
@@ -31,9 +43,9 @@ body {
 }
 
 button {
-    padding: 12px 25px;
+    padding: 14px 28px;
     font-size: 16px;
-    border-radius: 30px;
+    border-radius: 40px;
     border: none;
 }
 
@@ -44,14 +56,40 @@ button {
 
 #no {
     position: absolute;
-    background: #ccc;
+    background: #ddd;
+    color: #777;
+}
+
+/* FINAL SCREEN */
+#final {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #ff4d6d, #ff758c);
+    color: white;
+    font-size: 28px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* HEART ANIMATION */
+.heart {
+    position: fixed;
+    font-size: 22px;
+    animation: floatUp 1.6s ease forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-140px); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="box" id="box">
     <h2>Neha 💕<br>Will you be my Valentine?</h2>
 
     <div class="buttons">
@@ -60,11 +98,18 @@ button {
     </div>
 </div>
 
+<div id="final">
+    ❤️ Best decision ever ❤️
+</div>
+
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const area = document.querySelector(".buttons");
+const box = document.getElementById("box");
+const final = document.getElementById("final");
 
+// NO button escape (desktop + mobile)
 function moveNo(e) {
     e.preventDefault();
     const maxX = area.clientWidth - noBtn.offsetWidth;
@@ -76,23 +121,21 @@ function moveNo(e) {
 noBtn.addEventListener("mouseenter", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 
+// YES click
 yesBtn.addEventListener("click", () => {
-    document.body.innerHTML = `
-        <div style="
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background:#ff4d6d;
-            color:white;
-            font-size:28px;
-            text-align:center;
-        ">
-            ❤️ Best decision ever ❤️
-        </div>
-    `;
-});
+    box.style.display = "none";
+    final.style.display = "flex";
 
+    // heart burst
+    for (let i = 0; i < 18; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "💖";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.bottom = "30px";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1600);
+    }
 });
 </script>
 
